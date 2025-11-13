@@ -1,6 +1,6 @@
 # Programme Tracker
 
-This is the official Programme Tracker web application for SSF Malappuram West.
+This is the official Programme Tracker web application for Ziyad Bin.
 
 ## Project Overview
 

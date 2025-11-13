@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the 'app' directory to the Python path
+# This is the directory that contains alembic.ini
+sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 import asyncio
 from logging.config import fileConfig
 

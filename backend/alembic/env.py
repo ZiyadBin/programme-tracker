@@ -76,7 +76,7 @@ async def run_migrations_online() -> None:
     """
     # Use the async engine from our app's settings
     connectable = create_async_engine(
-        settings.DATABASE_URL.replace("+asyncpg", "+psycopg2"), # Use sync driver for Alembic
+        settings.DATABASE_URL,
         poolclass=pool.NullPool,
     )
 

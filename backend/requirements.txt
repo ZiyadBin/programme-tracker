@@ -1,0 +1,25 @@
+# Core FastAPI Framework
+fastapi
+uvicorn[standard]
+
+# Database
+sqlalchemy
+psycopg2-binary   # Postgres driver
+alembic           # For database migrations
+
+# Pydantic & Models
+pydantic
+pydantic-settings # For managing .env config
+
+# Security & Auth
+passlib[bcrypt]                 # Password hashing
+python-jose[cryptography]       # JWT creation & validation
+
+# File Storage (Optional for S3)
+boto3             # AWS S3 client
+
+# API Client (for testing)
+httpx
+
+# Utilities
+python-multipart  # For file uploads

@@ -8,6 +8,9 @@ from sqlalchemy.orm import selectinload
 from app import models, schemas
 from sqlalchemy.orm import selectinload, joinedload
 from uuid import UUID
+from app import models, schemas
+from sqlalchemy.future import select
+from uuid import UUID
 
 async def get_user_by_username(db: AsyncSession, username: str) -> models.User | None:
     """
@@ -188,5 +191,50 @@ async def get_programme_updates(db: AsyncSession, programme_id: UUID) -> List[mo
         .options(joinedload(models.ProgrammeUpdate.user))
         .filter(models.ProgrammeUpdate.programme_id == programme_id)
         .order_by(models.ProgrammeUpdate.created_at.asc())
+    )
+    return result.scalars().all()
+
+async def create_portfolio(db: AsyncSession, portfolio: schemas.PortfolioCreate) -> models.Portfolio:
+    db_portfolio = models.Portfolio(**portfolio.model_dump())
+    db.add(db_portfolio)
+    await db.commit()
+    await db.refresh(db_portfolio)
+    return db_portfolio
+
+async def get_portfolios(db: AsyncSession) -> List[models.Portfolio]:
+    result = await db.execute(select(models.Portfolio).order_by(models.Portfolio.name))
+    return result.scalars().all()
+
+# --- District CRUD ---
+
+async def create_district(db: AsyncSession, district: schemas.DistrictCreate) -> models.District:
+    db_district = models.District(**district.model_dump())
+    db.add(db_district)
+    await db.commit()
+    await db.refresh(db_district)
+    return db_district
+
+async def get_districts(db: AsyncSession) -> List[models.District]:
+    result = await db.execute(select(models.District).order_by(models.District.name))
+    return result.scalars().all()
+
+# --- Division CRUD ---
+
+async def create_division(db: AsyncSession, division: schemas.DivisionCreate) -> models.Division:
+    db_division = models.Division(**division.model_dump())
+    db.add(db_division)
+    await db.commit()
+    await db.refresh(db_division)
+    return db_division
+
+async def get_divisions(db: AsyncSession) -> List[models.Division]:
+    result = await db.execute(select(models.Division).order_by(models.Division.name))
+    return result.scalars().all()
+
+async def get_divisions_by_district(db: AsyncSession, district_id: UUID) -> List[models.Division]:
+    result = await db.execute(
+        select(models.Division)
+        .filter(models.Division.district_id == district_id)
+        .order_by(models.Division.name)
     )
     return result.scalars().all()

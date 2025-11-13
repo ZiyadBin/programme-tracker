@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.core.config import settings
-from app.api import auth, users
+from app.api import auth, users, programmes
 
 # Create the FastAPI app instance
 app = FastAPI(
@@ -28,6 +28,7 @@ if settings.BACKEND_CORS_ORIGINS:
 # --- API Routers ---
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users.router, prefix="/api/users", tags=["Users"]) 
+app.include_router(programmes.router, prefix="/api/programmes", tags=["Programmes"])
 
 # --- Health Check Endpoint ---
 @app.get("/api/health", tags=["Health"])

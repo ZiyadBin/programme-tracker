@@ -7,6 +7,7 @@ services:
       - "8000:8000"   # Expose port 8000 (FastAPI)
     volumes:
       - ./backend/app:/app/app  # Mount local 'app' code into container for live reload
+      - ./backend/alembic:/app/alembic
     env_file:
       - ./.env        # Load main environment variables (JWT_SECRET, S3 keys)
       - ./.env.db     # Load database credentials

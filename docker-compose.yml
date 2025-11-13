@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # 1. FastAPI Backend Service
+  backend:
+    build: ./backend  # Build from the Dockerfile in the ./backend directory
+    container_name: tracker_backend
+    ports:
+      - "8000:8000"   # Expose port 8000 (FastAPI)
+    volumes:
+      - ./backend/app:/app/app  # Mount local 'app' code into container for live reload
+    env_file:
+      - ./.env        # Load main environment variables (JWT_SECRET, S3 keys)
+      - ./.env.db     # Load database credentials
+    depends_on:
+      - db            # Wait for the database service to start
+      - minio         # Wait for the file storage service to start
+    restart: unless-stopped
+
+  # 2. PostgreSQL Database Service
+  db:
+    image: postgres:15-alpine
+    container_name: tracker_db
+    ports:
+      - "5432:5432"   # Expose port 5432 (Postgres)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist database data
+    env_file:
+      - ./.env.db     # Load database credentials
+    restart: unless-stopped
+
+  # 3. MinIO (Local S3-Compatible File Storage)
+  minio:
+    image: minio/minio
+    container_name: tracker_minio
+    ports:
+      - "9000:9000"   # API port
+      - "9001:9001"   # Console UI port
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  minio_data:

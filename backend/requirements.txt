@@ -4,7 +4,8 @@ uvicorn[standard]
 
 # Database
 sqlalchemy
-psycopg2-binary   # Postgres driver
+psycopg2-binary   # Postgres driver (for Alembic sync)
+asyncpg           # Postgres driver (for FastAPI async)
 alembic           # For database migrations
 
 # Pydantic & Models

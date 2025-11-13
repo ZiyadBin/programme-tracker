@@ -1,4 +1,4 @@
-# SSF Programme Tracker
+# Programme Tracker
 
 This is the official Programme Tracker web application for SSF Malappuram West.
 
